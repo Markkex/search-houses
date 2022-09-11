@@ -9,7 +9,13 @@ import { typeOfPurchaseData } from "./data/purchaseData";
 import { typeOfHouseData } from "./data/typeOfHouseData";
 import { districtData } from "./data/districtData";
 import { faroCounty } from "./data/countyData";
+import { albufeiraParish } from "./data/parishData";
+
 function App() {
+  const [countyArray, setCountyArray] = useState([]);
+  const [parishArray, setParishArray] = useState([]);
+  const [countyLoading, setCountyLoading] = useState(true);
+  const [parishLoading, setParishLoading] = useState(true);
   const [typeOfSell, setTypeOfSell] = useState(null);
   const [typeOfHouse, setTypeOfHouse] = useState(null);
   const [district, setDistrict] = useState(null);
@@ -28,7 +34,6 @@ function App() {
   const generateLinks = () => {
     let websites = [];
     setImovirtualLink(generateImovirtualLink());
-    console.log(typeOfSell);
   };
 
   const generateImovirtualLink = () => {
@@ -56,42 +61,123 @@ function App() {
     return imovirtualUrl;
   };
 
+  const findCounty = (val) => {
+    switch (Number(val)) {
+      case 8:
+        setCountyArray(faroCounty);
+        setCountyLoading(false);
+        break;
+      default:
+        console.log("not found");
+        break;
+    }
+  };
+
+  const findParish = (val) => {
+    console.log(val);
+    switch (Number(val)) {
+      case 1:
+        setParishArray(albufeiraParish);
+        setParishLoading(false);
+        console.log(parishArray);
+        break;
+      default:
+        console.log("not found");
+        break;
+    }
+  };
+
+  const handleChange = (
+    targetValue,
+    type = null,
+    setVariable,
+    objectArray,
+    setResultArray
+  ) => {
+    findObject(setVariable, targetValue, objectArray, setResultArray);
+    console.log("target value", targetValue);
+    if (type !== null) {
+      if (type == "SEARCHCOUNTY") {
+        findCounty(targetValue);
+      }
+      if (type == "SEARCHPARISH") {
+        console.log("here");
+        findParish(targetValue);
+      }
+    }
+  };
+
+  const findObject = (
+    setVariable,
+    objectKey = null,
+    objectArray,
+    setResultArray = ""
+  ) => {
+    let object;
+
+    if (objectKey !== "") {
+      object = Object.keys(objectArray)
+        .filter((key) => key == objectKey)
+        .reduce((obj, key) => {
+          return Object.assign(obj, {
+            [0]: objectArray[key],
+          });
+        }, {});
+      setVariable(objectKey);
+    }
+
+    if (setResultArray !== "") {
+      assignToResultArray(setResultArray, object);
+    }
+  };
+
+  const assignToResultArray = (setResultArray, value) => {
+    setResultArray(value);
+  };
+
   return (
     <div className="App">
       <Select
+        handleChange={handleChange}
+        type={null}
         selectorObject={typeOfPurchaseData}
-        variable={setTypeOfSell}
+        setVariable={setTypeOfSell}
         setResultArray={setResultTypeOfSell}
       />
       <Select
+        handleChange={handleChange}
+        type={null}
         selectorObject={typeOfHouseData}
-        variable={setTypeOfHouse}
+        setVariable={setTypeOfHouse}
         setResultArray={setResultTypeOfHouse}
       />
       <Select
+        handleChange={handleChange}
+        type={"SEARCHCOUNTY"}
         selectorObject={districtData}
-        variable={setDistrict}
+        setVariable={setDistrict}
         setResultArray={setResultDistrict}
       />
-
-      {district && (
+      {district && countyLoading == false && (
         <Select
-          variable={setCounty}
-          district={district}
+          handleChange={handleChange}
+          type={"SEARCHPARISH"}
+          selectorObject={countyArray}
+          setVariable={setCounty}
           setResultArray={setResultCounty}
         />
       )}
-
-      {county && (
+      {county && parishLoading == false && (
         <Select
-          variable={setParish}
-          countyCode={county}
+          handleChange={handleChange}
+          type={null}
+          setVariable={setParish}
+          selectorObject={parishArray}
           setResultArray={setResultParish}
         />
       )}
 
       <button onClick={() => generateLinks()}>Generate</button>
-
       {imovirtualLink !== null && (
         <div>
           <a target="_blank" href={imovirtualLink}>
