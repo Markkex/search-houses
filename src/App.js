@@ -10,11 +10,11 @@ import { typeOfHouseData } from "./data/typeOfHouseData";
 import { districtData } from "./data/districtData";
 import { faroCounty } from "./data/countyData";
 function App() {
-  const [typeOfSell, setTypeOfSell] = useState("");
-  const [typeOfHouse, setTypeOfHouse] = useState("");
-  const [district, setDistrict] = useState("");
-  const [county, setCounty] = useState("");
-  const [parish, setParish] = useState("");
+  const [typeOfSell, setTypeOfSell] = useState(null);
+  const [typeOfHouse, setTypeOfHouse] = useState(null);
+  const [district, setDistrict] = useState(null);
+  const [county, setCounty] = useState(null);
+  const [parish, setParish] = useState(null);
 
   //object given by district, county an parish
   const [resultTypeOfSell, setResultTypeOfSell] = useState("");
@@ -28,29 +28,29 @@ function App() {
   const generateLinks = () => {
     let websites = [];
     setImovirtualLink(generateImovirtualLink());
-    console.log("district", resultDistrict[0].value);
+    console.log(typeOfSell);
   };
 
   const generateImovirtualLink = () => {
     let imovirtualUrl = "https://www.imovirtual.com/";
 
-    if (typeOfSell !== "") {
-      imovirtualUrl += `${typeOfSell}/`;
+    if (typeOfSell !== null) {
+      imovirtualUrl += `${resultTypeOfSell[0].value}/`;
     }
-    if (typeOfHouse !== "") {
-      imovirtualUrl += `${typeOfHouse}/`;
-    }
-
-    if (district !== "") {
-      imovirtualUrl += `?search%5Bregion_id%5D=${district}`;
+    if (typeOfHouse !== null) {
+      imovirtualUrl += `${resultTypeOfHouse[0].value}/`;
     }
 
-    if (county !== "") {
-      imovirtualUrl += `&search%5Bsubregion_id%5D=${county}`;
+    if (district !== null) {
+      imovirtualUrl += `?search%5Bregion_id%5D=${resultDistrict[0].value}`;
     }
 
-    if (parish !== "") {
-      imovirtualUrl += `&search%5Bcity_id%5D=${parish}`;
+    if (county !== null) {
+      imovirtualUrl += `&search%5Bsubregion_id%5D=${resultCounty[0].value}`;
+    }
+
+    if (parish !== null) {
+      imovirtualUrl += `&search%5Bcity_id%5D=${resultParish[0].value}`;
     }
     console.log(imovirtualUrl);
     return imovirtualUrl;

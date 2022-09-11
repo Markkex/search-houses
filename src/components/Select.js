@@ -35,6 +35,7 @@ const Select = ({
 
   const findObject = (objectKey = null, objectArray, setResultArray = "") => {
     let object;
+
     if (objectKey !== "") {
       object = Object.keys(objectArray)
         .filter((key) => key == objectKey)
@@ -43,7 +44,9 @@ const Select = ({
             [0]: objectArray[key],
           });
         }, {});
+      variable(objectKey);
     }
+
     if (setResultArray !== "") {
       assignToResultArray(setResultArray, object);
     }
@@ -52,7 +55,7 @@ const Select = ({
   const assignToResultArray = (setResultArray, value) => {
     setResultArray(value);
   };
-
+  console.log(district);
   return (
     <div>
       {selectorObject && (
@@ -61,8 +64,8 @@ const Select = ({
             findObject(e.target.value, selectorObject, setResultArray)
           }
         >
-          {selectorObject.map((selector) => (
-            <option key={selector.name} value={selector.value}>
+          {selectorObject.map((selector, index) => (
+            <option key={index} value={index}>
               {selector.name}
             </option>
           ))}
@@ -83,8 +86,8 @@ const Select = ({
       )}
       {countyCode && findParish(countyCode) && (
         <select onChange={(e) => variable(e.target.value)}>
-          {parish.map((selector) => (
-            <option key={selector.name} value={selector.value}>
+          {parish.map((selector, index) => (
+            <option key={index} value={index}>
               {selector.name}
             </option>
           ))}
