@@ -10,7 +10,7 @@ const Scrapper = () => {
   const fetchingArray = [];
   const fetchHousesScrapper = () => {
     const header = {
-      method: "GET",
+      method: "POST",
       mode: "cors",
       cache: "default",
       credentials: "same-origin",
