@@ -11,7 +11,7 @@ const Scrapper = () => {
   const fetchHousesScrapper = () => {
     const header = {
       method: "POST",
-      mode: "cors",
+      mode: "no-cors",
       cache: "default",
       credentials: "same-origin",
       headers: {
