@@ -11,7 +11,6 @@ const Scrapper = () => {
   const fetchHousesScrapper = () => {
     const header = {
       method: "GET",
-      mode: "no-cors",
       cache: "default",
       credentials: "same-origin",
       headers: {
@@ -20,7 +19,7 @@ const Scrapper = () => {
       },
     };
 
-    fetch(`${textUrl}`, header)
+    fetch(`${textUrl}`, { method: "GET", headers: header })
       .then(function (response) {
         // When the page is loaded convert it to text
         return response.text();
