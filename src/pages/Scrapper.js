@@ -12,7 +12,7 @@ const Scrapper = () => {
     const header = {
       method: "GET",
       cache: "default",
-      credentials: "same-origin",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
         referrerPolicy: "unsafe-url",
