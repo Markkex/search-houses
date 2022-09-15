@@ -9,7 +9,7 @@ const Scrapper = () => {
   const [loading, setLoading] = useState(true);
   const fetchingArray = [];
   const fetchHousesScrapper = () => {
-    fetch(`https://cors-anywhere.herokuapp.com/${textUrl}`)
+    fetch(`${textUrl}`)
       .then(function (response) {
         // When the page is loaded convert it to text
         return response.text();
