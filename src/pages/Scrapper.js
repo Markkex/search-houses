@@ -9,7 +9,18 @@ const Scrapper = () => {
   const [loading, setLoading] = useState(true);
   const fetchingArray = [];
   const fetchHousesScrapper = () => {
-    fetch(`${textUrl}`)
+    const header = {
+      method: "GET",
+      mode: "cors",
+      cache: "default",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        referrerPolicy: "unsafe-url",
+      },
+    };
+
+    fetch(`${textUrl}`, header)
       .then(function (response) {
         // When the page is loaded convert it to text
         return response.text();
