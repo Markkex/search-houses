@@ -9,17 +9,19 @@ const Scrapper = () => {
   const [loading, setLoading] = useState(true);
   const fetchingArray = [];
   const fetchHousesScrapper = () => {
-    const header = {
-      method: "GET",
-      cache: "default",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        referrerPolicy: "unsafe-url",
-      },
-    };
+    let headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("Accept", "application/json");
 
-    fetch(`${textUrl}`, { method: "GET", headers: header })
+    headers.append(
+      "Access-Control-Allow-Origin",
+      "https://search-houses.vercel.app/"
+    );
+    headers.append("Access-Control-Allow-Credentials", "true");
+
+    headers.append("GET", "POST", "OPTIONS");
+
+    fetch(`${textUrl}`, { method: "GET", headers: headers })
       .then(function (response) {
         // When the page is loaded convert it to text
         return response.text();
