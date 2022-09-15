@@ -19,7 +19,7 @@ const Scrapper = () => {
     );
     headers.append("Access-Control-Allow-Credentials", "true");
 
-    headers.append("GET", "POST", "OPTIONS");
+    headers.append("GET");
 
     fetch(`${textUrl}`, { method: "GET", headers: headers })
       .then(function (response) {
