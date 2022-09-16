@@ -185,7 +185,9 @@ const Scrapper = () => {
                     <TableCell align="right">{row.location}</TableCell>
                     <TableCell align="right">{row.meterPrice}</TableCell>
                     <TableCell align="right">
-                      <a href={row.links}>{row.links}</a>
+                      <a target="_blank" href={row.links}>
+                        {row.links}
+                      </a>
                     </TableCell>
                   </TableRow>
                 ))}
