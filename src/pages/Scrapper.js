@@ -3,23 +3,23 @@ import * as cheerio from "cheerio";
 import React from "react";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 const Scrapper = () => {
   const [textUrl, setTextUrl] = useState("");
   const [loading, setLoading] = useState(true);
+  const [arrayDisplay, setArrayDisplay] = useState([]);
   const fetchingArray = [];
+
   const fetchHousesScrapper = () => {
-    let headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    headers.append("Accept", "application/json");
-
-    headers.append(
-      "Access-Control-Allow-Origin",
-      "https://search-houses.vercel.app/"
-    );
-    headers.append("Access-Control-Allow-Credentials", "true");
-
-    fetch(`${textUrl}`, { method: "GET", headers: headers })
+    setLoading(true);
+    fetch(`https://radiant-sands-98531.herokuapp.com/${textUrl}`)
       .then(function (response) {
         // When the page is loaded convert it to text
         return response.text();
@@ -70,7 +70,6 @@ const Scrapper = () => {
           pricePerMetter.push(perMeter);
         });
         $(".offer-item-price").each(function (i, element) {
-          console.log(element);
           let price = $(this).prepend().text();
           price = price.replace("\n", "");
           price = price.trim();
@@ -86,33 +85,52 @@ const Scrapper = () => {
           locationArea = filtered.trim();
           location.push(locationArea);
         });
-
+        /*
         $(".offer-item figure").each(function (i, element) {
           let imagesParsing = $(this).prepend().attr("data-quick-gallery");
           JSON.parse(imagesParsing);
-          console.log(imagesParsing);
-          imagesParsing = imagesParsing;
+
+          //          imagesParsing = imagesParsing.replace(/\\/g, "");
+
+          imagesParsing = imagesParsing.substring(11, 250);
 
           images.push(imagesParsing);
         });
-
-        console.log(images);
-        fetchingArray.description = names;
+        */ /*
+        console.log("fora");
+        for (let i = 0; i < images.length; i++) {
+          console.log("aquii");
+          do {
+            images[i] = images[i].slice(0, -1);
+          } while (images[i].search(/["]/g) != -1);
+        }
+        */ /*fetchingArray.description = names;
         fetchingArray.links = link;
         fetchingArray.tipology = tipology;
         fetchingArray.area = area;
         fetchingArray.meterPrice = pricePerMetter;
         fetchingArray.offerPrice = offerPrice;
         fetchingArray.location = location;
-
-        console.log(fetchingArray);
+        
+        */ for (let i = 0; i < names.length; i++) {
+          fetchingArray[i] = {
+            description: names[i],
+            links: link[i],
+            tipology: tipology[i],
+            area: area[i],
+            meterPrice: pricePerMetter[i],
+            offerPrice: offerPrice[i],
+            location: location[i],
+          };
+        }
+        setArrayDisplay(fetchingArray);
+        setLoading(false);
       })
       .catch(function (err) {
         console.log("Failed to fetch page: ", err);
       });
-    setLoading(false);
   };
-
+  console.log(arrayDisplay);
   return (
     <div>
       <h1>Scrapper (Imovirtual)</h1>
@@ -131,7 +149,51 @@ const Scrapper = () => {
         </Button>
       </div>
 
-      {loading !== true && <div>cenas</div>}
+      {loading == false && arrayDisplay.length > 0 && (
+        <div style={{ paddingTop: "20px" }}>
+          <TableContainer component={Paper}>
+            <Table
+              sx={{ minWidth: 650 }}
+              size="small"
+              aria-label="a dense table"
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell>Descrição</TableCell>
+                  <TableCell align="right">Tipologia</TableCell>
+                  <TableCell align="right">Area</TableCell>
+                  <TableCell align="right">Preço Final</TableCell>
+                  <TableCell align="right">Localização</TableCell>
+                  <TableCell align="right">Preço m/2</TableCell>
+                  <TableCell align="right">Link</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {arrayDisplay.map((row, index) => (
+                  <TableRow
+                    key={index}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                    }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.description}
+                    </TableCell>
+                    <TableCell align="right">{row.tipology}</TableCell>
+                    <TableCell align="right">{row.area}</TableCell>
+                    <TableCell align="right">{row.offerPrice}</TableCell>
+                    <TableCell align="right">{row.location}</TableCell>
+                    <TableCell align="right">{row.meterPrice}</TableCell>
+                    <TableCell align="right">
+                      <a href={row.links}>{row.links}</a>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+      )}
     </div>
   );
 };
